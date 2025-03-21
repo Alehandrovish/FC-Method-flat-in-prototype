@@ -55,22 +55,27 @@ class MyArray {
   static isMyArray(arr) {
     return arr instanceof MyArray;
   }
-}
-MyArray.prototype.flat = function (depht = 1) {
-  const newArr = new MyArray();
-  if (MyArray.isMyArray(this)) {
-    this.forEach((el) => {
-      if (Array.isArray(el) && depht > 0) {
-        newArr.push(...el.flat(depht - 1));
-      } else {
-        newArr.push(el);
-      }
-    });
-    return newArr;
-  }
-};
 
-const arr1 = new MyArray(0, 1, [2, [3, [4, 5]]]);
+  flat(depht = 1) {
+    let newArr = new MyArray();
+    if (MyArray.isMyArray(this)) {
+      this.forEach((el) => {
+        if (MyArray.isMyArray(el) && depht > 0) {
+          newArr = newArr.concat(el.flat(depht - 1));
+        } else {
+          newArr.push(el);
+        }
+      });
+      return newArr;
+    }
+  }
+}
+
+const arr1 = new MyArray(
+  0,
+  1,
+  new MyArray(2, new MyArray(3, new MyArray(4, 5)))
+);
 console.log(arr1.flat());
 const depht = Infinity;
 console.log(arr1.flat(depht));
